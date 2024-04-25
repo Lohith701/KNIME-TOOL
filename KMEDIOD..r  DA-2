@@ -1,0 +1,39 @@
+# Importing the dataset
+data <- read.csv("C:/Users/LOHITH/Downloads/archive (2)/healthcare_dataset.csv")
+
+# Handle missing values
+data <- na.omit(data)
+
+# Convert relevant columns to numeric and handle any invalid values
+data$Age <- as.numeric(as.character(data$Age))  # Convert to character first to handle non-numeric values
+data$`Room.Number` <- as.numeric(as.character(data$`Room.Number`))  # Convert to character first to handle non-numeric values
+
+# Check for invalid or infinite values
+print(any(is.infinite(unlist(data))))
+print(any(is.nan(unlist(data))))
+
+# Select features for performing clustering
+subset_data <- data[, c("Age", "Test.Results", "Room.Number")]
+
+# Assuming you want to create 3 clusters
+k <- 3
+
+# Perform k-medoids clustering
+library(cluster)
+kmedoids_result <- pam(subset_data, k)
+
+# Extract cluster assignments
+cluster_assignments <- kmedoids_result$clustering
+
+# Scatter plot of Age vs Room Number, colored by cluster
+plot(subset_data[, c("Age", "Room.Number")], 
+     col = cluster_assignments,
+     main = "K-Medoids Clustering: Age vs. Room Number",
+     xlab = "Age",
+     ylab = "Room Number")
+
+# Add cluster centers to the plot
+points(subset_data[kmedoids_result$medoids, c("Age", "Room.Number")], 
+       col = 1:k,
+       pch = 8, 
+       cex = 2)
