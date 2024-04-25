@@ -1,0 +1,27 @@
+# Importing the dataset
+data <- read.csv("C:/Users/LOHITH/Downloads/archive (2)/healthcare_dataset.csv")
+
+# Check the column names in your dataset
+print(names(data))
+
+# Select features for performing clustering
+subset_data <- data[, c("Age", "Billing.Amount", "Room.Number")]
+
+# Assuming you want to create 3 clusters
+k <- 3
+kmeans_result <- kmeans(subset_data, centers = k)
+
+cluster_assignments <- kmeans_result$cluster
+
+# Scatter plot of Age vs Billing Amount, colored by cluster
+plot(subset_data[, c("Age", "Billing.Amount")], 
+     col = cluster_assignments,
+     main = "K-Means Clustering: Age vs. Billing.Amount",
+     xlab = "Age",
+     ylab = "Billing Amount")
+
+# Add cluster centers to the plot
+points(kmeans_result$centers[, c("Age", "Billing.Amount")], 
+       col = 1:k,
+       pch = 8, 
+       cex = 2)
