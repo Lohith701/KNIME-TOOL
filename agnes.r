@@ -7,10 +7,10 @@ categorical_data <- healthcare_data[, c("Name", "Gender", "Blood.Type", "Medical
 # Convert categorical variables to factors
 categorical_data <- lapply(categorical_data, as.factor)
 
-# Convert to dataframe
+# Converting into dataframe
 categorical_df <- as.data.frame(categorical_data)
 
-# Compute dissimilarity matrix using Gower's distance
+
 library(cluster)
 dissimilarity_matrix <- daisy(categorical_df, metric = "gower")
 
