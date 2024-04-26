@@ -1,39 +1,49 @@
 # Importing the dataset
-data <- read.csv("C:/Users/LOHITH/Downloads/archive (2)/healthcare_dataset.csv")
+dataset <- read.csv("C:/Users/LOHITH/Downloads/archive (2)/healthcare_dataset.csv")
 
-# Handle missing values
-data <- na.omit(data)
+# Handling missing values
+dataset <- na.omit(dataset)
 
-# Convert relevant columns to numeric and handle any invalid values
-data$Age <- as.numeric(as.character(data$Age))  # Convert to character first to handle non-numeric values
-data$`Room.Number` <- as.numeric(as.character(data$`Room.Number`))  # Convert to character first to handle non-numeric values
+# Converting relevant columns to numeric and handling any invalid values
+# Converting Age and columns to numeric after handling non-numeric values
+dataset$Age <- as.numeric(as.character(dataset$Age))
+# Converting Room Number column to numeric after handling non-numeric values
+tryCatch({
+  dataset$Room.Number <- as.numeric(as.character(dataset$Room.Number))
+}, error = function(e) {
+  cat("Error occurred during conversion:", e$message, "\n")
+})
 
-# Check for invalid or infinite values
-print(any(is.infinite(unlist(data))))
-print(any(is.nan(unlist(data))))
+# Check if any invalid values exist after conversion
+print(any(is.na(dataset$Room.Number)))
 
-# Select features for performing clustering
-subset_data <- data[, c("Age", "Test.Results", "Room.Number")]
 
-# Assuming you want to create 3 clusters
-k <- 3
+# Checking for invalid or infinite values
+print(any(is.infinite(unlist(dataset))))
+print(any(is.nan(unlist(dataset))))
 
-# Perform k-medoids clustering
+# Selecting features for performing clustering
+subset_data <- dataset[, c("Age", "Test.Results", "Room.Number")]
+
+# Assuming we want to create 3 clusters
+num_clusters <- 3
+
+# Performing k-medoids clustering
 library(cluster)
-kmedoids_result <- pam(subset_data, k)
+kmedoids_result <- pam(subset_data, num_clusters)
 
-# Extract cluster assignments
+# Extracting cluster assignments
 cluster_assignments <- kmedoids_result$clustering
 
 # Scatter plot of Age vs Room Number, colored by cluster
 plot(subset_data[, c("Age", "Room.Number")], 
      col = cluster_assignments,
-     main = "K-Medoids Clustering: Age vs. Room Number",
+     main = "K-Medoids Clustering: Age vs. Room.Number",
      xlab = "Age",
      ylab = "Room Number")
 
-# Add cluster centers to the plot
+# Adding cluster centers to the plot
 points(subset_data[kmedoids_result$medoids, c("Age", "Room.Number")], 
-       col = 1:k,
+       col = 1:num_clusters,
        pch = 8, 
        cex = 2)
