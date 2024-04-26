@@ -14,8 +14,13 @@ categorical_df <- as.data.frame(categorical_data)
 library(cluster)
 dissimilarity_matrix <- daisy(categorical_df, metric = "gower")
 
+
+categorical_df <- data.frame(lapply(categorical_df, function(x) as.numeric(factor(x))))
+
 # Perform clustering using CLARA
-clara_result <- clara(dissimilarity_matrix, k = 3)  # Assuming you want 3 clusters
+clara_result <- clara(categorical_df, k = 3)  # Assuming you want 3 clusters
+
+# Assuming you want 3 clusters
 
 # Extract cluster assignments
 cluster_assignments <- clara_result$clustering
