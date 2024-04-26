@@ -1,23 +1,21 @@
-# Load the dataset
-healthcare_data <- read.csv("C:/Users/LOHITH/Downloads/archive (2)/healthcare_dataset.csv")
+# Read the dataset
+data <- read.csv("C:/Users/LOHITH/Downloads/archive (2)/healthcare_dataset.csv")
 
-# Select the categorical features for clustering
-categorical_data <- healthcare_data[, c("Name", "Gender", "Blood.Type", "Medical.Condition", "Doctor", "Hospital", "Insurance.Provider", "Admission.Type", "Medication", "Test.Results")]
+# Select categorical features for clustering
+categorical <- data[, c("Name", "Gender", "Blood.Type", "Medical.Condition", "Doctor", "Hospital", "Insurance.Provider", "Admission.Type", "Medication", "Test.Results")]
 
 # Convert categorical variables to factors
-categorical_data <- lapply(categorical_data, as.factor)
+categorical <- lapply(categorical, as.factor)
 
 # Convert to dataframe
-categorical_df <- as.data.frame(categorical_data)
+categorical_df <- as.data.frame(categorical)
 
 # Compute dissimilarity matrix using Gower's distance
 library(cluster)
-dissimilarity_matrix <- daisy(categorical_df, metric = "gower")
+diss_matrix <- daisy(categorical_df, metric = "gower")
 
 # Perform hierarchical clustering
-hclust_result <- hclust(as.dist(dissimilarity_matrix))
+hclust_res <- hclust(as.dist(diss_matrix))
 
 # Plot dendrogram
-plot(hclust_result, main = "Dendrogram: Hierarchical Clustering", xlab = "Observations", ylab = "Distance")
-`
-
+plot(hclust_res, main = "Dendrogram for Healthcare Data", xlab = "Observations", ylab = "Distance")
