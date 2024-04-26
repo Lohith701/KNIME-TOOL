@@ -1,3 +1,4 @@
+
 # Read the dataset
 data <- read.csv("C:/Users/LOHITH/Downloads/archive (2)/healthcare_dataset.csv")
 
