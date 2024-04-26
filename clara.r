@@ -10,7 +10,7 @@ categorical_data <- lapply(categorical_data, as.factor)
 # Convert to dataframe
 categorical_df <- as.data.frame(categorical_data)
 
-# Compute dissimilarity matrix using Gower's distance
+
 library(cluster)
 dissimilarity_matrix <- daisy(categorical_df, metric = "gower")
 
@@ -23,4 +23,3 @@ cluster_assignments <- clara_result$clustering
 # Plot the data points with cluster colors
 plot(categorical_df$Test.Results, col = cluster_assignments, pch = 19, 
      main = "CLARA Clustering Results", xlab = "Test Results", ylab = "Cluster Assignments")
-
